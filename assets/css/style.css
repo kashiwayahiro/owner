@@ -304,7 +304,7 @@ main { flex: 1; }
    ============================================================ */
 .property-hero {
   position: relative;
-  height: 25vh;
+  height: 50vh;
   overflow: hidden;
   background: #111;
 }
@@ -355,9 +355,9 @@ main { flex: 1; }
   flex-wrap: wrap;
 }
 
-@media (min-width: 640px)  { .property-hero { height: 25vh; } }
+@media (min-width: 640px)  { .property-hero { height: 50vh; } }
 @media (min-width: 1024px) {
-  .property-hero { height: 25vh; }
+  .property-hero { height: 50vh; }
   .property-hero-content { padding: 2.5rem; }
 }
 
