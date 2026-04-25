@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>予約確認 — 森に浮かぶ集落</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="confirm-page">
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="top.html" class="header-logo">
+        森に浮かぶ集落
+        <span>Owner Portal</span>
+      </a>
+      <div class="header-actions">
+        <span id="owner-name"></span>
+        <button type="button" onclick="logout()">ログアウト</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- 通常状態：確認フォーム -->
+      <div id="confirm-view">
+        <div class="confirm-heading">
+          <h1>予約確認</h1>
+          <p>内容をご確認のうえ、予約を確定してください</p>
+        </div>
+
+        <div class="confirm-card">
+
+          <!-- 予約内容 -->
+          <section class="confirm-section" aria-labelledby="booking-detail-heading">
+            <h2 class="confirm-section-title" id="booking-detail-heading">予約内容</h2>
+            <div class="confirm-detail">
+              <div class="confirm-row">
+                <span class="confirm-row-label">物件</span>
+                <span class="confirm-row-value">森に浮かぶ集落</span>
+              </div>
+              <div class="confirm-row">
+                <span class="confirm-row-label">チェックイン</span>
+                <span class="confirm-row-value" id="disp-checkin">—</span>
+              </div>
+              <div class="confirm-row">
+                <span class="confirm-row-label">チェックアウト</span>
+                <span class="confirm-row-value" id="disp-checkout">—</span>
+              </div>
+              <div class="confirm-row">
+                <span class="confirm-row-label">宿泊数</span>
+                <span class="confirm-row-value"><span id="disp-nights">—</span> 泊</span>
+              </div>
+            </div>
+          </section>
+
+          <hr class="confirm-divider">
+
+          <!-- 時間入力 -->
+          <section class="confirm-section" aria-labelledby="time-heading">
+            <h2 class="confirm-section-title" id="time-heading">チェックイン / アウト時間</h2>
+            <div class="confirm-detail">
+              <div class="confirm-row" style="align-items:center;">
+                <label class="confirm-row-label" for="checkin-time">チェックイン時間</label>
+                <div class="form-field" style="margin:0;min-width:140px;">
+                  <input
+                    type="time"
+                    id="checkin-time"
+                    name="checkin_time"
+                    value="15:00"
+                    style="font-size:1rem;padding:0.25rem 0;"
+                  >
+                </div>
+              </div>
+              <div class="confirm-row" style="align-items:center;">
+                <label class="confirm-row-label" for="checkout-time">チェックアウト時間</label>
+                <div class="form-field" style="margin:0;min-width:140px;">
+                  <input
+                    type="time"
+                    id="checkout-time"
+                    name="checkout_time"
+                    value="11:00"
+                    style="font-size:1rem;padding:0.25rem 0;"
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="confirm-divider">
+
+          <!-- アクション -->
+          <div class="confirm-actions">
+            <button type="button" class="btn btn-forest" onclick="confirmBooking()">
+              予約を確定する
+            </button>
+            <a href="top.html" class="btn btn-ghost" style="text-align:center;">
+              ← カレンダーに戻る
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 完了状態 -->
+      <div id="success-view" class="confirm-card hidden" style="max-width:580px;margin:4rem auto;text-align:center;padding:4rem 3rem;">
+        <div class="confirm-success">
+          <div class="confirm-success-icon">✓</div>
+          <h2>ご予約が確定しました</h2>
+          <p>
+            予約内容はオーナー事務局より<br>
+            メールにてご連絡いたします。
+          </p>
+          <a href="top.html" class="btn btn-forest">マイページへ戻る</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <span>森に浮かぶ集落</span>
+      <span>© 2026 Mori ni Ukabu Shuraku</span>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

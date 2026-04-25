@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>森に浮かぶ集落 — マイページ</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="top.html" class="header-logo">
+        森に浮かぶ集落
+        <span>Owner Portal</span>
+      </a>
+      <div class="header-actions">
+        <span id="owner-name"></span>
+        <button type="button" onclick="logout()">ログアウト</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 物件概要 -->
+    <section class="property-overview" aria-labelledby="property-heading">
+      <div class="property-image">
+        <span class="property-image-label">Mori ni Ukabu Shuraku</span>
+      </div>
+      <div class="property-info">
+        <div class="property-tag">持分所有物件</div>
+        <h1 class="property-name" id="property-heading">森に浮かぶ集落</h1>
+        <p class="property-location">岐阜県 — 奥飛騨温泉郷</p>
+        <p class="property-desc">
+          山深い原生林に溶け込む、全8棟の集落型ホテル。
+          四季折々の自然と静寂の中で、唯一無二の滞在をお届けします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 残り宿泊日数 -->
+    <div class="container">
+      <section class="remaining-section" aria-labelledby="remaining-heading">
+        <div>
+          <div class="remaining-label" id="remaining-heading">残り宿泊可能日数</div>
+          <div class="remaining-value">
+            <span id="remaining-days-num">14</span
+            ><span class="remaining-unit">泊</span>
+          </div>
+        </div>
+        <p class="remaining-note">
+          今年度の宿泊可能日数の残り日数です。
+          カレンダーから空き日程を選択して予約してください。
+        </p>
+      </section>
+
+      <!-- 予約カレンダー -->
+      <section class="calendar-section" aria-labelledby="calendar-heading">
+        <div class="calendar-section-header">
+          <h2 class="calendar-section-title" id="calendar-heading">宿泊予約カレンダー</h2>
+          <span class="calendar-section-hint">チェックイン日→チェックアウト日の順にクリック</span>
+        </div>
+
+        <div class="calendar-wrap">
+          <div class="calendar-nav">
+            <button class="cal-nav-btn" id="cal-prev" type="button" aria-label="前月">← 前月</button>
+            <span class="cal-month-label" id="cal-month-label"></span>
+            <button class="cal-nav-btn" id="cal-next" type="button" aria-label="翌月">翌月 →</button>
+          </div>
+
+          <div class="cal-grid" id="cal-grid" role="grid" aria-label="カレンダー">
+            <!-- JS で生成 -->
+          </div>
+
+          <div class="calendar-legend">
+            <div class="legend-item">
+              <span class="legend-dot available"></span>空き
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot booked"></span>予約済み
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot selected"></span>選択中
+            </div>
+          </div>
+
+          <div class="calendar-footer">
+            <div class="calendar-selection-info" id="selection-info">
+              チェックイン日を選択してください
+            </div>
+            <button
+              type="button"
+              id="reserve-btn"
+              class="btn btn-forest hidden"
+              onclick="goToConfirm()"
+            >
+              この日程で予約する
+            </button>
+          </div>
+
+          <div class="calendar-error hidden" id="cal-error" aria-live="polite"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <span>森に浮かぶ集落</span>
+      <span>© 2026 Mori ni Ukabu Shuraku</span>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
