@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>物件一覧 — オーナーズポータル</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="../index.html" class="site-logo">
+        🏠 オーナーズポータル
+        <span>宿泊予約管理</span>
+      </a>
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <a href="../index.html">ホーム</a>
+        <a href="properties.html" aria-current="page">物件一覧</a>
+        <a href="booking.html">予約する</a>
+        <a href="reservations.html">予約一覧</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <header class="page-header">
+        <h1>物件一覧</h1>
+        <p>登録されている宿泊物件の一覧です。</p>
+      </header>
+
+      <!-- 物件グリッド -->
+      <section aria-label="物件一覧">
+        <div class="grid grid-3">
+
+          <!-- 物件 1 -->
+          <article class="property-card">
+            <div class="property-card-image" aria-hidden="true">🏡</div>
+            <div class="property-card-body">
+              <h2 class="property-card-title">新宿の一軒家</h2>
+              <div class="property-card-meta">
+                <span>📍 東京都新宿区西新宿 3-1-8</span>
+                <span>🛏 寝室 3 室　定員 6 名</span>
+                <span>🚉 新宿駅 徒歩 12 分</span>
+              </div>
+              <div>
+                <span class="badge badge-success">公開中</span>
+              </div>
+              <div class="property-card-actions">
+                <a href="booking.html?property=1" class="btn btn-primary btn-sm">予約する</a>
+                <a href="reservations.html?property=1" class="btn btn-ghost btn-sm">予約一覧</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 物件 2 -->
+          <article class="property-card">
+            <div class="property-card-image" aria-hidden="true" style="background-color:#d4e8d4;">🏯</div>
+            <div class="property-card-body">
+              <h2 class="property-card-title">京都の町家</h2>
+              <div class="property-card-meta">
+                <span>📍 京都府京都市中京区三条通 2-5</span>
+                <span>🛏 寝室 2 室　定員 4 名</span>
+                <span>🚉 三条駅 徒歩 5 分</span>
+              </div>
+              <div>
+                <span class="badge badge-success">公開中</span>
+              </div>
+              <div class="property-card-actions">
+                <a href="booking.html?property=2" class="btn btn-primary btn-sm">予約する</a>
+                <a href="reservations.html?property=2" class="btn btn-ghost btn-sm">予約一覧</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 物件 3 -->
+          <article class="property-card">
+            <div class="property-card-image" aria-hidden="true" style="background-color:#d4eef8;">🌊</div>
+            <div class="property-card-body">
+              <h2 class="property-card-title">沖縄のマンション</h2>
+              <div class="property-card-meta">
+                <span>📍 沖縄県那覇市おもろまち 1-4-7</span>
+                <span>🛏 寝室 1 室　定員 2 名</span>
+                <span>🚉 おもろまち駅 徒歩 8 分</span>
+              </div>
+              <div>
+                <span class="badge badge-warning">メンテナンス中</span>
+              </div>
+              <div class="property-card-actions">
+                <a href="booking.html?property=3" class="btn btn-outline btn-sm">予約する</a>
+                <a href="reservations.html?property=3" class="btn btn-ghost btn-sm">予約一覧</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <span>🏠 オーナーズポータル</span>
+      <small>© 2026 Owner's Portal. All rights reserved.</small>
+    </div>
+  </footer>
+</body>
+</html>

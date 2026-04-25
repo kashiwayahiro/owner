@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オーナーズポータル — 宿泊予約管理</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="site-logo">
+        🏠 オーナーズポータル
+        <span>宿泊予約管理</span>
+      </a>
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <a href="index.html" aria-current="page">ホーム</a>
+        <a href="pages/properties.html">物件一覧</a>
+        <a href="pages/booking.html">予約する</a>
+        <a href="pages/reservations.html">予約一覧</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" aria-label="ウェルカムセクション">
+    <div class="container">
+      <h1>物件オーナーのための<br>予約管理ポータル</h1>
+      <p>お持ちの宿泊施設の予約を一元管理できます。新規予約の受付から予約状況の確認まで、シンプルな操作で行えます。</p>
+      <div class="hero-actions">
+        <a href="pages/booking.html" class="btn btn-accent btn-lg">新規予約を作成</a>
+        <a href="pages/reservations.html" class="btn btn-lg" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.4);">予約一覧を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="container">
+      <!-- 集計サマリー -->
+      <section aria-labelledby="stats-heading">
+        <h2 id="stats-heading" class="section-title">現在の状況</h2>
+        <div class="grid grid-4">
+          <article class="stat-card">
+            <span class="stat-card-label">登録物件数</span>
+            <span class="stat-card-value">3 <span class="stat-card-unit">件</span></span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card-label">今月の予約数</span>
+            <span class="stat-card-value">8 <span class="stat-card-unit">件</span></span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card-label">直近のチェックイン</span>
+            <span class="stat-card-value" style="font-size:1.5rem;">5/2 <span class="stat-card-unit">（木）</span></span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card-label">確認待ち予約</span>
+            <span class="stat-card-value" style="color:var(--color-accent)">2 <span class="stat-card-unit">件</span></span>
+          </article>
+        </div>
+      </section>
+
+      <!-- クイックアクション -->
+      <section aria-labelledby="actions-heading" class="mt-8">
+        <h2 id="actions-heading" class="section-title">クイックアクション</h2>
+        <div class="grid grid-3">
+          <a href="pages/properties.html" class="action-card">
+            <div class="action-card-icon" aria-hidden="true">🏘️</div>
+            <h2>物件一覧</h2>
+            <p>登録されている物件の情報を確認・管理します。各物件の詳細や状態を把握できます。</p>
+            <span class="action-card-link">物件を確認する →</span>
+          </a>
+          <a href="pages/booking.html" class="action-card">
+            <div class="action-card-icon" aria-hidden="true">📅</div>
+            <h2>新規予約</h2>
+            <p>新しい宿泊予約を作成します。物件・日程・宿泊者情報を入力して予約を登録できます。</p>
+            <span class="action-card-link">予約を作成する →</span>
+          </a>
+          <a href="pages/reservations.html" class="action-card">
+            <div class="action-card-icon" aria-hidden="true">📋</div>
+            <h2>予約一覧</h2>
+            <p>すべての予約状況を一覧で確認できます。ステータス別のフィルタリングで素早く検索できます。</p>
+            <span class="action-card-link">予約を確認する →</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <span>🏠 オーナーズポータル</span>
+      <small>© 2026 Owner's Portal. All rights reserved.</small>
+    </div>
+  </footer>
+</body>
+</html>
