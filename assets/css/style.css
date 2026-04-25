@@ -304,7 +304,7 @@ main { flex: 1; }
    ============================================================ */
 .property-hero {
   position: relative;
-  height: 87px;
+  height: 113px;
   overflow: hidden;
   background: #111;
 }
@@ -355,7 +355,7 @@ main { flex: 1; }
   flex-wrap: wrap;
 }
 
-@media (min-width: 640px)  { .property-hero { height: 107px; } }
+@media (min-width: 640px)  { .property-hero { height: 139px; } }
 @media (min-width: 1024px) {
   .property-hero { height: 133px; }
   .property-hero-content { padding: 2.5rem; }
