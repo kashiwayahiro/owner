@@ -3,111 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>森に浮かぶ集落 — マイページ</title>
+  <title>マイページ — 森に浮かぶ集落 オーナーポータル</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
+  <!-- ヘッダー -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a href="top.html" class="header-logo">
-        森に浮かぶ集落
-        <span>Owner Portal</span>
+        <span class="header-logo-main">森に浮かぶ集落</span>
+        <span class="header-logo-sub">Owner Portal</span>
       </a>
-      <div class="header-actions">
-        <span id="owner-name"></span>
-        <button type="button" onclick="logout()">ログアウト</button>
+      <div class="header-right">
+        <span class="header-owner" id="owner-name"></span>
+        <button class="btn-logout" type="button" onclick="logout()">ログアウト</button>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- 物件概要 -->
-    <section class="property-overview" aria-labelledby="property-heading">
-      <div class="property-image">
-        <span class="property-image-label">Mori ni Ukabu Shuraku</span>
+  <!-- 物件ヒーロー -->
+  <section aria-labelledby="prop-heading">
+    <div class="property-hero">
+      <img src="../assets/images/top1.webp" alt="森に浮かぶ集落 外観">
+      <div class="property-hero-overlay">
+        <div class="property-hero-content container">
+          <div class="property-hero-badge">持分所有物件</div>
+          <h1 class="property-hero-name" id="prop-heading">森に浮かぶ集落</h1>
+          <div class="property-hero-meta">
+            <span>📍 岐阜県 奥飛騨温泉郷</span>
+            <span>🏡 全8棟 集落型ホテル</span>
+            <span>♨️ 温泉付き</span>
+          </div>
+        </div>
       </div>
-      <div class="property-info">
-        <div class="property-tag">持分所有物件</div>
-        <h1 class="property-name" id="property-heading">森に浮かぶ集落</h1>
-        <p class="property-location">岐阜県 — 奥飛騨温泉郷</p>
-        <p class="property-desc">
-          山深い原生林に溶け込む、全8棟の集落型ホテル。
-          四季折々の自然と静寂の中で、唯一無二の滞在をお届けします。
-        </p>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 残り宿泊日数 -->
+  <!-- 残り宿泊日数バー -->
+  <div class="remaining-bar" role="status" aria-label="残り宿泊可能日数">
+    <div class="container remaining-inner">
+      <div class="remaining-left">
+        <div class="remaining-count">
+          <span class="remaining-num" id="remaining-days-num">14</span>
+          <span class="remaining-unit-label">泊</span>
+        </div>
+        <div class="remaining-desc">
+          <strong>残り宿泊可能日数</strong><br>
+          <div class="nights-progress">
+            <div class="nights-progress-fill" id="nights-progress-fill" style="width:70%"></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-light);text-align:right;line-height:1.6;">
+        今年度の宿泊可能日数<br>
+        <strong style="color:var(--text);">年間 20泊</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <main class="top-body">
     <div class="container">
-      <section class="remaining-section" aria-labelledby="remaining-heading">
-        <div>
-          <div class="remaining-label" id="remaining-heading">残り宿泊可能日数</div>
-          <div class="remaining-value">
-            <span id="remaining-days-num">14</span
-            ><span class="remaining-unit">泊</span>
+      <div class="top-layout">
+
+        <!-- カレンダー（メインエリア） -->
+        <div class="top-main">
+          <div class="calendar-card" role="region" aria-label="宿泊予約カレンダー">
+
+            <!-- カードヘッダー -->
+            <div class="calendar-card-header">
+              <div>
+                <div class="cal-title">📅 宿泊予約カレンダー</div>
+                <div class="cal-subtitle">空き日程を選択して予約できます</div>
+              </div>
+              <!-- ステップインジケーター -->
+              <div class="booking-steps" id="step-indicator" aria-label="予約ステップ">
+                <div class="step active" id="step1">
+                  <div class="step-num">1</div>
+                  <span>IN日</span>
+                </div>
+                <span class="step-sep">→</span>
+                <div class="step" id="step2">
+                  <div class="step-num">2</div>
+                  <span>OUT日</span>
+                </div>
+                <span class="step-sep">→</span>
+                <div class="step" id="step3">
+                  <div class="step-num">3</div>
+                  <span>確認</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 月ナビゲーション -->
+            <div class="cal-nav">
+              <button class="cal-nav-btn" id="cal-prev" type="button" aria-label="前月へ">◀ 前月</button>
+              <span class="cal-month-label" id="cal-month-label"></span>
+              <button class="cal-nav-btn" id="cal-next" type="button" aria-label="翌月へ">翌月 ▶</button>
+            </div>
+
+            <!-- カレンダー本体 -->
+            <div class="cal-wrap">
+              <div class="cal-grid" id="cal-grid" role="grid" aria-label="日付選択カレンダー"></div>
+            </div>
+
+            <!-- 凡例 -->
+            <div class="cal-legend" aria-label="カレンダーの凡例">
+              <div class="legend-item"><span class="legend-dot legend-available"></span>空き</div>
+              <div class="legend-item"><span class="legend-dot legend-booked"></span>予約済み</div>
+              <div class="legend-item"><span class="legend-dot legend-selected"></span>選択中</div>
+              <div class="legend-item"><span class="legend-dot legend-range"></span>滞在期間</div>
+            </div>
+
+            <!-- 選択状態・フッター -->
+            <div class="cal-footer">
+              <div class="cal-selection-bar">
+                <div class="cal-dates-display" aria-live="polite" aria-label="選択した日程">
+                  <div class="cal-date-chip">
+                    <span class="cal-date-chip-label">チェックイン</span>
+                    <span class="cal-date-chip-value placeholder" id="disp-start">—</span>
+                  </div>
+                  <span class="cal-date-sep">→</span>
+                  <div class="cal-date-chip">
+                    <span class="cal-date-chip-label">チェックアウト</span>
+                    <span class="cal-date-chip-value placeholder" id="disp-end">—</span>
+                  </div>
+                  <span class="cal-nights-badge hidden" id="disp-nights"></span>
+                </div>
+
+                <!-- PC用予約ボタン -->
+                <button
+                  type="button"
+                  id="reserve-btn"
+                  class="btn btn-primary hidden"
+                  onclick="goToConfirm()"
+                >
+                  この日程で予約する ›
+                </button>
+              </div>
+
+              <!-- エラーメッセージ -->
+              <div class="cal-error hidden" id="cal-error" aria-live="assertive"></div>
+            </div>
           </div>
         </div>
-        <p class="remaining-note">
-          今年度の宿泊可能日数の残り日数です。
-          カレンダーから空き日程を選択して予約してください。
-        </p>
-      </section>
 
-      <!-- 予約カレンダー -->
-      <section class="calendar-section" aria-labelledby="calendar-heading">
-        <div class="calendar-section-header">
-          <h2 class="calendar-section-title" id="calendar-heading">宿泊予約カレンダー</h2>
-          <span class="calendar-section-hint">チェックイン日→チェックアウト日の順にクリック</span>
-        </div>
-
-        <div class="calendar-wrap">
-          <div class="calendar-nav">
-            <button class="cal-nav-btn" id="cal-prev" type="button" aria-label="前月">← 前月</button>
-            <span class="cal-month-label" id="cal-month-label"></span>
-            <button class="cal-nav-btn" id="cal-next" type="button" aria-label="翌月">翌月 →</button>
+        <!-- サイドバー -->
+        <aside class="top-sidebar" aria-label="物件情報">
+          <!-- 物件情報 -->
+          <div class="sidebar-card">
+            <div class="sidebar-card-header">物件情報</div>
+            <div class="sidebar-card-body">
+              <div class="prop-info-row">
+                <span class="prop-info-icon">📍</span>
+                <div>
+                  <div style="font-weight:500;font-size:0.9rem;">岐阜県飛騨市</div>
+                  <div style="font-size:0.8rem;color:var(--text-light);">奥飛騨温泉郷 神坂地区</div>
+                </div>
+              </div>
+              <div class="prop-info-row">
+                <span class="prop-info-icon">🏡</span>
+                <span>全8棟・各棟完全貸切</span>
+              </div>
+              <div class="prop-info-row">
+                <span class="prop-info-icon">♨️</span>
+                <span>源泉かけ流し露天風呂付き</span>
+              </div>
+              <div class="prop-info-row">
+                <span class="prop-info-icon">🚗</span>
+                <span>高山ICより車で約50分</span>
+              </div>
+              <hr class="divider">
+              <div style="font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;">設備・サービス</div>
+              <div class="amenity-list">
+                <span class="amenity-tag">🍳 朝食付き</span>
+                <span class="amenity-tag">🅿️ 無料駐車場</span>
+                <span class="amenity-tag">📶 Wi-Fi</span>
+                <span class="amenity-tag">🌿 自然散策</span>
+                <span class="amenity-tag">🔥 囲炉裏</span>
+              </div>
+            </div>
           </div>
 
-          <div class="cal-grid" id="cal-grid" role="grid" aria-label="カレンダー">
-            <!-- JS で生成 -->
-          </div>
-
-          <div class="calendar-legend">
-            <div class="legend-item">
-              <span class="legend-dot available"></span>空き
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot booked"></span>予約済み
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot selected"></span>選択中
+          <!-- 宿泊ルール -->
+          <div class="sidebar-card" style="margin-top:1rem;">
+            <div class="sidebar-card-header">宿泊ルール</div>
+            <div class="sidebar-card-body" style="font-size:0.82rem;color:var(--text-mid);line-height:1.7;">
+              <p>✓ チェックイン：15:00〜20:00</p>
+              <p>✓ チェックアウト：〜11:00</p>
+              <p>✓ 連続予約は最大7泊まで</p>
+              <p>✓ 3ヶ月前から予約可能</p>
             </div>
           </div>
+        </aside>
 
-          <div class="calendar-footer">
-            <div class="calendar-selection-info" id="selection-info">
-              チェックイン日を選択してください
-            </div>
-            <button
-              type="button"
-              id="reserve-btn"
-              class="btn btn-forest hidden"
-              onclick="goToConfirm()"
-            >
-              この日程で予約する
-            </button>
-          </div>
-
-          <div class="calendar-error hidden" id="cal-error" aria-live="polite"></div>
-        </div>
-      </section>
+      </div>
     </div>
   </main>
 
+  <!-- モバイル用スティッキー予約バー -->
+  <div class="sticky-reserve-bar hidden" id="sticky-bar" aria-live="polite">
+    <div class="sticky-info">
+      <strong id="sticky-dates">日程を選択してください</strong>
+      <span id="sticky-nights"></span>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm" onclick="goToConfirm()">
+      予約へ進む ›
+    </button>
+  </div>
+
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
-      <span>森に浮かぶ集落</span>
-      <span>© 2026 Mori ni Ukabu Shuraku</span>
+      <span class="footer-brand">森に浮かぶ集落</span>
+      <span>© 2026 Mori ni Ukabu Shuraku. All rights reserved.</span>
     </div>
   </footer>
 

@@ -6,54 +6,59 @@
   <title>森に浮かぶ集落 — オーナー宿泊予約</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body class="login-body">
 
-  <div class="login-page">
-    <!-- 左：森のビジュアル -->
-    <div class="login-visual" role="img" aria-label="森に浮かぶ集落の外観">
-      <div class="login-visual-caption">
-        <h1>森に浮かぶ<br>集落</h1>
-        <p>Owner Accommodation Reservation</p>
-      </div>
+  <!-- 左: 写真ビジュアル -->
+  <div class="login-hero">
+    <img src="assets/images/top1.webp" alt="森に浮かぶ集落 外観">
+    <div class="login-hero-overlay">
+      <h1 class="login-hero-title">森に浮かぶ集落</h1>
+      <p class="login-hero-sub">Owner Accommodation Reservation</p>
     </div>
+  </div>
 
-    <!-- 右：ログインパネル -->
-    <div class="login-panel">
-      <div class="login-panel-heading">
-        <h2>ログイン</h2>
-        <p>Owner Portal</p>
+  <!-- 右: ログインフォーム -->
+  <div class="login-form-wrap">
+    <div class="login-form-inner">
+      <div class="login-form-heading">
+        <h1>オーナーログイン</h1>
+        <p>持分オーナー専用の宿泊予約ポータルです</p>
       </div>
 
       <form id="login-form" novalidate>
-        <div class="form-field">
-          <label for="username">オーナーID</label>
+        <div class="form-group">
+          <label class="form-label" for="username">オーナーID</label>
           <input
             type="text"
             id="username"
-            name="username"
+            class="form-control"
+            placeholder="IDを入力してください"
             autocomplete="username"
-            placeholder="ID を入力"
             required
           >
         </div>
-        <div class="form-field">
-          <label for="password">パスワード</label>
+        <div class="form-group">
+          <label class="form-label" for="password">パスワード</label>
           <input
             type="password"
             id="password"
-            name="password"
+            class="form-control"
+            placeholder="パスワードを入力してください"
             autocomplete="current-password"
-            placeholder="パスワードを入力"
             required
           >
         </div>
 
         <div class="form-error" id="login-error" aria-live="polite"></div>
 
-        <div style="margin-top:2.5rem;">
-          <button type="submit" class="btn btn-forest btn-full">ログイン</button>
+        <div style="margin-top:1.5rem;">
+          <button type="submit" class="btn btn-primary btn-full btn-lg">ログイン</button>
         </div>
       </form>
+
+      <p style="margin-top:2rem;font-size:0.75rem;color:var(--text-light);text-align:center;line-height:1.6;">
+        ご不明な点はオーナー事務局（0120-XXX-XXX）まで<br>お問い合わせください。
+      </p>
     </div>
   </div>
 

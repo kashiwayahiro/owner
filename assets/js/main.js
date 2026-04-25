@@ -1,273 +1,325 @@
 // ============================================================
-// 定数・設定
+// 定数
 // ============================================================
-var TEST_ID = 'testid';
-var TEST_PW = 'testpw';
-var OWNER_NAME = '山田 太郎';
+var TEST_ID  = 'testid';
+var TEST_PW  = 'testpw';
+var OWNER_NAME = '山田 太郎 様';
+var TOTAL_NIGHTS = 20; // 年間付与日数
 
-// 既に予約済みの日付セット（YYYY-MM-DD）
-var BOOKED_DATES = new Set([
-  '2026-05-10', '2026-05-11', '2026-05-12',
-  '2026-05-22', '2026-05-23', '2026-05-24',
-  '2026-06-07', '2026-06-08', '2026-06-09', '2026-06-10',
-  '2026-07-01', '2026-07-02',
+// 予約済み日付（YYYY-MM-DD）
+var BOOKED = new Set([
+  '2026-05-08','2026-05-09','2026-05-10',
+  '2026-05-20','2026-05-21','2026-05-22','2026-05-23',
+  '2026-06-05','2026-06-06','2026-06-07','2026-06-08',
+  '2026-07-10','2026-07-11',
 ]);
 
 // ============================================================
 // ユーティリティ
 // ============================================================
-function padZ(n) { return n < 10 ? '0' + n : String(n); }
-function dateToStr(d) {
-  return d.getFullYear() + '-' + padZ(d.getMonth() + 1) + '-' + padZ(d.getDate());
+function padZ(n) { return n < 10 ? '0' + n : '' + n; }
+function toStr(d) {
+  return d.getFullYear() + '-' + padZ(d.getMonth()+1) + '-' + padZ(d.getDate());
 }
-function strToDate(s) {
+function toDate(s) {
   var p = s.split('-');
-  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return new Date(+p[0], +p[1]-1, +p[2]);
 }
-function daysBetween(start, end) {
-  return Math.round((strToDate(end) - strToDate(start)) / 86400000);
+function diffDays(a, b) {
+  return Math.round((toDate(b) - toDate(a)) / 86400000);
 }
-function formatDateJa(s) {
+function fmtJa(s) {
   var p = s.split('-');
-  return p[0] + '年' + Number(p[1]) + '月' + Number(p[2]) + '日';
+  return p[0] + '年' + +p[1] + '月' + +p[2] + '日';
 }
-function hasBookedInRange(start, end) {
-  var cur = strToDate(start);
-  var endD = strToDate(end);
-  while (cur < endD) {
-    if (BOOKED_DATES.has(dateToStr(cur))) return true;
-    cur.setDate(cur.getDate() + 1);
+function hasBooked(start, end) {
+  var cur = toDate(start);
+  var e   = toDate(end);
+  while (cur < e) {
+    if (BOOKED.has(toStr(cur))) return true;
+    cur.setDate(cur.getDate()+1);
   }
   return false;
 }
-function getRemainingDays() {
-  var v = sessionStorage.getItem('remainingDays');
-  return v !== null ? Number(v) : 14;
+function getRemaining() {
+  var v = sessionStorage.getItem('remaining');
+  return v !== null ? +v : 14;
 }
-function setRemainingDays(n) {
-  sessionStorage.setItem('remainingDays', String(n));
+function setRemaining(n) {
+  sessionStorage.setItem('remaining', '' + Math.max(0, n));
 }
 
 // ============================================================
 // 認証
 // ============================================================
-function requireLogin(basePath) {
+function requireAuth(root) {
   if (!sessionStorage.getItem('loggedIn')) {
-    window.location.href = basePath + 'index.html';
+    window.location.href = root + 'index.html';
   }
 }
 function logout() {
   sessionStorage.removeItem('loggedIn');
-  // パスの深さを確認して正しいindexへ
-  var isInPages = window.location.pathname.includes('/pages/');
-  window.location.href = isInPages ? '../index.html' : 'index.html';
+  var inPages = window.location.pathname.includes('/pages/');
+  window.location.href = inPages ? '../index.html' : 'index.html';
+}
+function showOwnerName() {
+  var el = document.getElementById('owner-name');
+  if (el) el.textContent = sessionStorage.getItem('ownerName') || '';
 }
 
 // ============================================================
 // ログインページ
 // ============================================================
-(function loginPage() {
+(function initLogin() {
   var form = document.getElementById('login-form');
   if (!form) return;
 
-  // すでにログイン済みならトップへ
   if (sessionStorage.getItem('loggedIn')) {
     window.location.href = 'pages/top.html';
     return;
   }
 
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
     var id = document.getElementById('username').value.trim();
     var pw = document.getElementById('password').value;
-    var errEl = document.getElementById('login-error');
+    var err = document.getElementById('login-error');
 
     if (id === TEST_ID && pw === TEST_PW) {
       sessionStorage.setItem('loggedIn', 'true');
       sessionStorage.setItem('ownerName', OWNER_NAME);
       window.location.href = 'pages/top.html';
     } else {
-      errEl.textContent = 'IDまたはパスワードが正しくありません。';
+      err.textContent = 'IDまたはパスワードが正しくありません。';
       document.getElementById('password').value = '';
+      document.getElementById('password').focus();
     }
   });
 })();
 
 // ============================================================
-// トップページ
+// トップページ（カレンダー）
 // ============================================================
-(function topPage() {
+(function initTop() {
   if (!document.getElementById('cal-grid')) return;
-  requireLogin('../');
-
-  // オーナー名表示
-  var nameEl = document.getElementById('owner-name');
-  if (nameEl) nameEl.textContent = sessionStorage.getItem('ownerName') || '';
+  requireAuth('../');
+  showOwnerName();
 
   // 残り日数表示
-  var remEl = document.getElementById('remaining-days-num');
-  if (remEl) remEl.textContent = getRemainingDays();
+  var remaining = getRemaining();
+  var numEl = document.getElementById('remaining-days-num');
+  if (numEl) numEl.textContent = remaining;
+  var bar = document.getElementById('nights-progress-fill');
+  if (bar) bar.style.width = Math.round(remaining / TOTAL_NIGHTS * 100) + '%';
 
-  // カレンダー状態
-  var today = dateToStr(new Date());
+  var today    = toStr(new Date());
   var viewYear = new Date().getFullYear();
-  var viewMonth = new Date().getMonth(); // 0-indexed
+  var viewMon  = new Date().getMonth(); // 0-based
   var selStart = null;
-  var selEnd = null;
-  var hoverDate = null;
+  var selEnd   = null;
+  var hoverD   = null;
 
+  // ---- 描画 ----
   function render() {
-    var label = document.getElementById('cal-month-label');
-    label.textContent = viewYear + '年 ' + (viewMonth + 1) + '月';
+    // 月ラベル
+    document.getElementById('cal-month-label').textContent =
+      viewYear + '年 ' + (viewMon+1) + '月';
 
     var grid = document.getElementById('cal-grid');
     grid.innerHTML = '';
 
     // 曜日ヘッダー
-    var wdays = ['日', '月', '火', '水', '木', '金', '土'];
-    wdays.forEach(function (d) {
-      var cell = document.createElement('div');
-      cell.className = 'cal-weekday';
-      cell.textContent = d;
-      grid.appendChild(cell);
+    ['日','月','火','水','木','金','土'].forEach(function(d) {
+      var h = document.createElement('div');
+      h.className = 'cal-weekday';
+      h.textContent = d;
+      grid.appendChild(h);
     });
 
-    // 月の最初の曜日（空セル）
-    var firstDay = new Date(viewYear, viewMonth, 1).getDay();
-    for (var i = 0; i < firstDay; i++) {
-      var blank = document.createElement('div');
-      blank.className = 'cal-day empty';
-      grid.appendChild(blank);
+    // 空白セル
+    var firstDow = new Date(viewYear, viewMon, 1).getDay();
+    for (var i = 0; i < firstDow; i++) {
+      var b = document.createElement('div');
+      b.className = 'cal-day empty';
+      b.setAttribute('aria-hidden', 'true');
+      grid.appendChild(b);
     }
 
     // 日付セル
-    var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-    for (var d = 1; d <= daysInMonth; d++) {
-      var dateStr = viewYear + '-' + padZ(viewMonth + 1) + '-' + padZ(d);
+    var lastDay = new Date(viewYear, viewMon+1, 0).getDate();
+    for (var d = 1; d <= lastDay; d++) {
+      var ds = viewYear + '-' + padZ(viewMon+1) + '-' + padZ(d);
       var cell = document.createElement('div');
-      cell.className = 'cal-day';
-      cell.textContent = d;
-      cell.dataset.date = dateStr;
       cell.setAttribute('role', 'gridcell');
+      cell.dataset.date = ds;
 
-      var classes = ['cal-day'];
+      var cls = ['cal-day'];
+      var isPast   = ds < today;
+      var isBooked = BOOKED.has(ds);
+      var isToday  = ds === today;
 
-      if (dateStr === today) classes.push('today');
-
-      if (dateStr < today) {
-        classes.push('past');
-        cell.setAttribute('aria-disabled', 'true');
-      } else if (BOOKED_DATES.has(dateStr)) {
-        classes.push('booked');
-        cell.setAttribute('aria-label', d + '日 予約済み');
-      } else {
+      if (isPast)        { cls.push('past'); cell.setAttribute('aria-disabled','true'); }
+      else if (isBooked) { cls.push('booked'); cell.setAttribute('aria-label', d+'日 予約済み'); }
+      else {
         // 選択状態
         if (selStart && selEnd) {
-          if (dateStr === selStart) classes.push('selected-start');
-          else if (dateStr === selEnd) classes.push('selected-end');
-          else if (dateStr > selStart && dateStr < selEnd) classes.push('in-range');
+          if      (ds === selStart)                   cls.push('selected-start');
+          else if (ds === selEnd)                     cls.push('selected-end');
+          else if (ds > selStart && ds < selEnd)      cls.push('in-range');
         } else if (selStart && !selEnd) {
-          if (dateStr === selStart) classes.push('selected-start');
-          else if (hoverDate && dateStr > selStart && dateStr <= hoverDate) {
-            classes.push('hover-range');
-          }
+          if (ds === selStart)                        cls.push('selected-start');
+          else if (hoverD && ds > selStart && ds <= hoverD) cls.push('hover-range');
         }
+
         cell.addEventListener('click', onDateClick);
-        cell.addEventListener('mouseenter', onDateHover);
+        cell.addEventListener('mouseenter', onHover);
+        cell.setAttribute('tabindex', '0');
+        cell.setAttribute('role', 'button');
+        cell.setAttribute('aria-label', d + '日');
+        cell.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onDateClick.call(this);
+          }
+        });
       }
 
-      cell.className = classes.join(' ');
+      if (isToday) cls.push('today');
+      cell.className = cls.join(' ');
+      cell.textContent = d;
       grid.appendChild(cell);
     }
 
     updateFooter();
   }
 
+  // ---- 日付クリック ----
   function onDateClick() {
-    var dateStr = this.dataset.date;
-    var errEl = document.getElementById('cal-error');
-    errEl.classList.add('hidden');
-    errEl.textContent = '';
+    var ds  = this.dataset.date;
+    var err = document.getElementById('cal-error');
+    err.classList.add('hidden');
+    err.textContent = '';
 
     if (!selStart || (selStart && selEnd)) {
-      selStart = dateStr;
-      selEnd = null;
+      // 新規選択開始
+      selStart = ds;
+      selEnd   = null;
     } else {
-      if (dateStr <= selStart) {
-        selStart = dateStr;
-        selEnd = null;
+      if (ds <= selStart) {
+        selStart = ds;
+        selEnd   = null;
       } else {
-        if (hasBookedInRange(selStart, dateStr)) {
-          errEl.textContent = '選択した期間内に予約済みの日程が含まれています。';
-          errEl.classList.remove('hidden');
+        // 終了日の確定（バリデーション）
+        if (hasBooked(selStart, ds)) {
+          err.textContent = '選択した期間に予約済みの日程が含まれています。';
+          err.classList.remove('hidden');
           return;
         }
-        var nights = daysBetween(selStart, dateStr);
-        if (nights > getRemainingDays()) {
-          errEl.textContent = '残り宿泊可能日数（' + getRemainingDays() + '泊）を超えています。';
-          errEl.classList.remove('hidden');
+        var nights = diffDays(selStart, ds);
+        if (nights > getRemaining()) {
+          err.textContent = '残り宿泊可能日数（' + getRemaining() + '泊）を超えています。';
+          err.classList.remove('hidden');
           return;
         }
-        selEnd = dateStr;
+        selEnd = ds;
       }
     }
+    hoverD = null;
     render();
   }
 
-  function onDateHover() {
+  // ---- ホバープレビュー ----
+  function onHover() {
     if (selStart && !selEnd) {
-      hoverDate = this.dataset.date;
+      hoverD = this.dataset.date;
       render();
     }
   }
 
+  document.getElementById('cal-grid').addEventListener('mouseleave', function() {
+    if (selStart && !selEnd && hoverD) {
+      hoverD = null;
+      render();
+    }
+  });
+
+  // ---- フッター更新 ----
   function updateFooter() {
-    var infoEl = document.getElementById('selection-info');
-    var btnEl = document.getElementById('reserve-btn');
+    var startEl  = document.getElementById('disp-start');
+    var endEl    = document.getElementById('disp-end');
+    var nightsEl = document.getElementById('disp-nights');
+    var btnEl    = document.getElementById('reserve-btn');
+    var stickyBar = document.getElementById('sticky-bar');
+    var step1 = document.getElementById('step1');
+    var step2 = document.getElementById('step2');
+    var step3 = document.getElementById('step3');
+
+    // placeholder クラスのリセット
+    startEl.className = 'cal-date-chip-value placeholder';
+    endEl.className   = 'cal-date-chip-value placeholder';
+    startEl.textContent = '—';
+    endEl.textContent   = '—';
+    nightsEl.classList.add('hidden');
+    btnEl.classList.add('hidden');
+    if (stickyBar) stickyBar.classList.add('hidden');
+
+    // ステップ更新
+    [step1, step2, step3].forEach(function(s) {
+      s.classList.remove('active','done');
+    });
 
     if (!selStart) {
-      infoEl.innerHTML = 'チェックイン日を選択してください';
-      btnEl.classList.add('hidden');
+      step1.classList.add('active');
     } else if (!selEnd) {
-      infoEl.innerHTML = '<strong>' + formatDateJa(selStart) + '</strong>チェックアウト日を選択してください';
-      btnEl.classList.add('hidden');
+      startEl.className  = 'cal-date-chip-value';
+      startEl.textContent = fmtJa(selStart);
+      step1.classList.add('done');
+      step2.classList.add('active');
     } else {
-      var nights = daysBetween(selStart, selEnd);
-      infoEl.innerHTML =
-        '<strong>' + formatDateJa(selStart) + ' → ' + formatDateJa(selEnd) + '</strong>' +
-        nights + '泊';
+      var nights = diffDays(selStart, selEnd);
+      startEl.className  = 'cal-date-chip-value';
+      startEl.textContent = fmtJa(selStart);
+      endEl.className    = 'cal-date-chip-value';
+      endEl.textContent   = fmtJa(selEnd);
+      nightsEl.textContent = nights + '泊';
+      nightsEl.classList.remove('hidden');
       btnEl.classList.remove('hidden');
+
+      step1.classList.add('done');
+      step2.classList.add('done');
+      step3.classList.add('active');
+
+      // モバイル用スティッキーバー
+      if (stickyBar) {
+        stickyBar.classList.remove('hidden');
+        document.getElementById('sticky-dates').textContent =
+          fmtJa(selStart) + ' → ' + fmtJa(selEnd);
+        document.getElementById('sticky-nights').textContent = '（' + nights + '泊）';
+      }
     }
   }
 
-  // 月ナビゲーション
-  document.getElementById('cal-prev').addEventListener('click', function () {
-    if (viewMonth === 0) { viewMonth = 11; viewYear--; }
-    else viewMonth--;
-    selStart = null; selEnd = null; hoverDate = null;
+  // ---- 月ナビ ----
+  document.getElementById('cal-prev').addEventListener('click', function() {
+    if (viewMon === 0) { viewMon = 11; viewYear--; }
+    else viewMon--;
+    selStart = selEnd = hoverD = null;
     render();
   });
-  document.getElementById('cal-next').addEventListener('click', function () {
-    if (viewMonth === 11) { viewMonth = 0; viewYear++; }
-    else viewMonth++;
-    selStart = null; selEnd = null; hoverDate = null;
+  document.getElementById('cal-next').addEventListener('click', function() {
+    if (viewMon === 11) { viewMon = 0; viewYear++; }
+    else viewMon++;
+    selStart = selEnd = hoverD = null;
     render();
   });
 
-  // マウスが外れたらホバー解除
-  document.getElementById('cal-grid').addEventListener('mouseleave', function () {
-    if (selStart && !selEnd) {
-      hoverDate = null;
-      render();
-    }
-  });
-
-  window.goToConfirm = function () {
+  // ---- 予約へ進む ----
+  window.goToConfirm = function() {
     if (!selStart || !selEnd) return;
     sessionStorage.setItem('booking', JSON.stringify({
-      checkin: selStart,
+      checkin:  selStart,
       checkout: selEnd,
-      nights: daysBetween(selStart, selEnd)
+      nights:   diffDays(selStart, selEnd),
     }));
     window.location.href = 'booking-confirm.html';
   };
@@ -278,39 +330,25 @@ function logout() {
 // ============================================================
 // 予約確認ページ
 // ============================================================
-(function confirmPage() {
+(function initConfirm() {
   if (!document.getElementById('confirm-view')) return;
-  requireLogin('../');
-
-  // オーナー名表示
-  var nameEl = document.getElementById('owner-name');
-  if (nameEl) nameEl.textContent = sessionStorage.getItem('ownerName') || '';
+  requireAuth('../');
+  showOwnerName();
 
   var booking = JSON.parse(sessionStorage.getItem('booking') || 'null');
-  if (!booking) {
-    window.location.href = 'top.html';
-    return;
-  }
+  if (!booking) { window.location.href = 'top.html'; return; }
 
-  document.getElementById('disp-checkin').textContent = formatDateJa(booking.checkin);
-  document.getElementById('disp-checkout').textContent = formatDateJa(booking.checkout);
-  document.getElementById('disp-nights').textContent = booking.nights;
+  var remaining = getRemaining();
 
-  window.confirmBooking = function () {
-    // 残り日数を減算して保存
-    var remaining = getRemainingDays() - booking.nights;
-    setRemainingDays(Math.max(0, remaining));
+  document.getElementById('disp-checkin').textContent  = fmtJa(booking.checkin);
+  document.getElementById('disp-checkout').textContent = fmtJa(booking.checkout);
+  document.getElementById('disp-nights').textContent   = booking.nights;
+  document.getElementById('disp-remaining').textContent =
+    (remaining - booking.nights) + ' 泊';
 
-    // 予約日を既予約セットに追加（実際はサーバー保存）
-    var cur = strToDate(booking.checkin);
-    var endD = strToDate(booking.checkout);
-    while (cur < endD) {
-      BOOKED_DATES.add(dateToStr(cur));
-      cur.setDate(cur.getDate() + 1);
-    }
-
+  window.confirmBooking = function() {
+    setRemaining(remaining - booking.nights);
     sessionStorage.removeItem('booking');
-
     document.getElementById('confirm-view').classList.add('hidden');
     document.getElementById('success-view').classList.remove('hidden');
   };

@@ -3,117 +3,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>予約確認 — 森に浮かぶ集落</title>
+  <title>予約確認 — 森に浮かぶ集落 オーナーポータル</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="confirm-page">
+<body>
 
+  <!-- ヘッダー -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a href="top.html" class="header-logo">
-        森に浮かぶ集落
-        <span>Owner Portal</span>
+        <span class="header-logo-main">森に浮かぶ集落</span>
+        <span class="header-logo-sub">Owner Portal</span>
       </a>
-      <div class="header-actions">
-        <span id="owner-name"></span>
-        <button type="button" onclick="logout()">ログアウト</button>
+      <div class="header-right">
+        <span class="header-owner" id="owner-name"></span>
+        <button class="btn-logout" type="button" onclick="logout()">ログアウト</button>
       </div>
     </div>
   </header>
 
-  <main>
+  <main class="confirm-main">
     <div class="container">
 
-      <!-- 通常状態：確認フォーム -->
-      <div id="confirm-view">
-        <div class="confirm-heading">
-          <h1>予約確認</h1>
-          <p>内容をご確認のうえ、予約を確定してください</p>
+      <!-- パンくず -->
+      <nav class="breadcrumb" aria-label="パンくず">
+        <a href="top.html">マイページ</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>予約確認</span>
+      </nav>
+
+      <!-- 進捗バー -->
+      <div class="booking-progress" aria-label="予約ステップ">
+        <div class="progress-step done">
+          <div class="progress-step-num">✓</div>
+          <span>日程選択</span>
         </div>
+        <div class="progress-line done"></div>
+        <div class="progress-step active">
+          <div class="progress-step-num">2</div>
+          <span>予約確認</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+          <div class="progress-step-num">3</div>
+          <span>完了</span>
+        </div>
+      </div>
 
-        <div class="confirm-card">
+      <!-- 通常表示：確認フォーム -->
+      <div id="confirm-view">
+        <div class="confirm-layout">
 
-          <!-- 予約内容 -->
-          <section class="confirm-section" aria-labelledby="booking-detail-heading">
-            <h2 class="confirm-section-title" id="booking-detail-heading">予約内容</h2>
-            <div class="confirm-detail">
-              <div class="confirm-row">
-                <span class="confirm-row-label">物件</span>
-                <span class="confirm-row-value">森に浮かぶ集落</span>
-              </div>
-              <div class="confirm-row">
-                <span class="confirm-row-label">チェックイン</span>
-                <span class="confirm-row-value" id="disp-checkin">—</span>
-              </div>
-              <div class="confirm-row">
-                <span class="confirm-row-label">チェックアウト</span>
-                <span class="confirm-row-value" id="disp-checkout">—</span>
-              </div>
-              <div class="confirm-row">
-                <span class="confirm-row-label">宿泊数</span>
-                <span class="confirm-row-value"><span id="disp-nights">—</span> 泊</span>
-              </div>
-            </div>
-          </section>
+          <!-- メインカラム -->
+          <div class="confirm-main-col">
 
-          <hr class="confirm-divider">
+            <!-- 予約内容 -->
+            <div class="confirm-card">
+              <div class="confirm-card-header">予約内容の確認</div>
+              <div class="confirm-card-body">
+                <div class="confirm-summary-grid">
+                  <div class="confirm-summary-item">
+                    <div class="confirm-summary-label">チェックイン</div>
+                    <div class="confirm-summary-value" id="disp-checkin">—</div>
+                  </div>
+                  <div class="confirm-summary-item">
+                    <div class="confirm-summary-label">チェックアウト</div>
+                    <div class="confirm-summary-value" id="disp-checkout">—</div>
+                  </div>
+                  <div class="confirm-summary-item">
+                    <div class="confirm-summary-label">宿泊数</div>
+                    <div class="confirm-summary-value">
+                      <span id="disp-nights">—</span>
+                      <small> 泊</small>
+                    </div>
+                  </div>
+                  <div class="confirm-summary-item">
+                    <div class="confirm-summary-label">使用日数残り</div>
+                    <div class="confirm-summary-value" id="disp-remaining" style="color:var(--primary);">— 泊</div>
+                  </div>
+                </div>
 
-          <!-- 時間入力 -->
-          <section class="confirm-section" aria-labelledby="time-heading">
-            <h2 class="confirm-section-title" id="time-heading">チェックイン / アウト時間</h2>
-            <div class="confirm-detail">
-              <div class="confirm-row" style="align-items:center;">
-                <label class="confirm-row-label" for="checkin-time">チェックイン時間</label>
-                <div class="form-field" style="margin:0;min-width:140px;">
-                  <input
-                    type="time"
-                    id="checkin-time"
-                    name="checkin_time"
-                    value="15:00"
-                    style="font-size:1rem;padding:0.25rem 0;"
-                  >
+                <hr class="divider">
+
+                <!-- チェックイン/アウト時間 -->
+                <h2 style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:1rem;">
+                  チェックイン / アウト時間
+                </h2>
+                <div class="time-row">
+                  <div class="form-group">
+                    <label class="form-label" for="checkin-time">チェックイン時間</label>
+                    <input
+                      type="time"
+                      id="checkin-time"
+                      class="form-control"
+                      value="15:00"
+                    >
+                    <div style="font-size:0.72rem;color:var(--text-light);margin-top:0.25rem;">15:00〜20:00の間</div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="checkout-time">チェックアウト時間</label>
+                    <input
+                      type="time"
+                      id="checkout-time"
+                      class="form-control"
+                      value="11:00"
+                    >
+                    <div style="font-size:0.72rem;color:var(--text-light);margin-top:0.25rem;">〜11:00まで</div>
+                  </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- 注意事項 -->
+                <div style="background:var(--gold-light);border-radius:var(--radius);padding:1rem;font-size:0.82rem;line-height:1.7;color:var(--text-mid);">
+                  <strong style="color:var(--gold);display:block;margin-bottom:0.25rem;">📋 ご確認ください</strong>
+                  予約確定後はオーナー事務局よりご連絡いたします。
+                  キャンセルは宿泊日の2週間前までにお申し出ください。
+                </div>
+
+                <div class="confirm-actions" style="margin-top:1.5rem;">
+                  <button type="button" class="btn btn-primary btn-lg" onclick="confirmBooking()">
+                    予約を確定する
+                  </button>
+                  <a href="top.html" class="btn btn-ghost">
+                    ← カレンダーに戻る
+                  </a>
                 </div>
               </div>
-              <div class="confirm-row" style="align-items:center;">
-                <label class="confirm-row-label" for="checkout-time">チェックアウト時間</label>
-                <div class="form-field" style="margin:0;min-width:140px;">
-                  <input
-                    type="time"
-                    id="checkout-time"
-                    name="checkout_time"
-                    value="11:00"
-                    style="font-size:1rem;padding:0.25rem 0;"
-                  >
+            </div>
+
+          </div>
+
+          <!-- サイドカラム：物件サマリー -->
+          <div class="confirm-side-col">
+            <div class="prop-summary-card">
+              <img class="prop-summary-img" src="../assets/images/top1.webp" alt="森に浮かぶ集落">
+              <div class="prop-summary-body">
+                <div class="prop-summary-name">森に浮かぶ集落</div>
+                <div class="prop-summary-loc">📍 岐阜県 奥飛騨温泉郷</div>
+                <hr class="divider">
+                <div style="font-size:0.8rem;color:var(--text-mid);line-height:1.7;">
+                  <p>♨️ 源泉かけ流し露天風呂付き</p>
+                  <p>🍳 朝食付き</p>
+                  <p>🅿️ 無料駐車場</p>
                 </div>
               </div>
             </div>
-          </section>
-
-          <hr class="confirm-divider">
-
-          <!-- アクション -->
-          <div class="confirm-actions">
-            <button type="button" class="btn btn-forest" onclick="confirmBooking()">
-              予約を確定する
-            </button>
-            <a href="top.html" class="btn btn-ghost" style="text-align:center;">
-              ← カレンダーに戻る
-            </a>
           </div>
 
         </div>
       </div>
 
-      <!-- 完了状態 -->
-      <div id="success-view" class="confirm-card hidden" style="max-width:580px;margin:4rem auto;text-align:center;padding:4rem 3rem;">
-        <div class="confirm-success">
-          <div class="confirm-success-icon">✓</div>
+      <!-- 完了表示 -->
+      <div id="success-view" class="hidden" style="padding:2rem 0;">
+        <div class="success-card">
+          <div class="success-icon" aria-hidden="true">✓</div>
           <h2>ご予約が確定しました</h2>
           <p>
-            予約内容はオーナー事務局より<br>
-            メールにてご連絡いたします。
+            予約番号・詳細はオーナー事務局より<br>
+            メールにてご連絡いたします。<br>
+            ご不明な点はお気軽にお問い合わせください。
           </p>
-          <a href="top.html" class="btn btn-forest">マイページへ戻る</a>
+          <a href="top.html" class="btn btn-primary">マイページへ戻る</a>
         </div>
       </div>
 
@@ -122,8 +173,8 @@
 
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
-      <span>森に浮かぶ集落</span>
-      <span>© 2026 Mori ni Ukabu Shuraku</span>
+      <span class="footer-brand">森に浮かぶ集落</span>
+      <span>© 2026 Mori ni Ukabu Shuraku. All rights reserved.</span>
     </div>
   </footer>
 
